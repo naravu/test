@@ -13,7 +13,7 @@ creds_dict = st.secrets["gcp_service_account"]
 creds = Credentials.from_service_account_info(creds_dict, scopes=scope)
 client = gspread.authorize(creds)
 
-sheet = client.open("StreamlitEntries").sheet1
+sheet = client.open("queriesdemo").sheet1
 
 # --- Streamlit UI ---
 st.title("Streamlit → Google Sheets Demo")
