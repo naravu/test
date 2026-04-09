@@ -3,14 +3,16 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
 # --- Google Sheets Setup ---
-# Define scope
-scope = ["https://spreadsheets.google.com/feeds",
-         "https://www.googleapis.com/auth/spreadsheets",
-         "https://www.googleapis.com/auth/drive.file",
-         "https://www.googleapis.com/auth/drive"]
+scope = [
+    "https://spreadsheets.google.com/feeds",
+    "https://www.googleapis.com/auth/spreadsheets",
+    "https://www.googleapis.com/auth/drive.file",
+    "https://www.googleapis.com/auth/drive"
+]
 
-# Load credentials from your service account JSON file
-creds = ServiceAccountCredentials.from_json_keyfile_name("gen-lang-client-0838395604-d7e116eb86ec.json", scope)
+# Load credentials from Streamlit secrets instead of a local file
+creds_dict = st.secrets["gcp_service_account"]
+creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
 client = gspread.authorize(creds)
 
 # Open your Google Sheet (use name or URL)
@@ -24,6 +26,5 @@ email = st.text_input("Enter your email")
 feedback = st.text_area("Your feedback")
 
 if st.button("Submit"):
-    # Append entry to Google Sheet
     sheet.append_row([name, email, feedback])
     st.success("Your entry has been saved to Google Sheets!")
